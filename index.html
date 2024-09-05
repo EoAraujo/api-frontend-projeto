@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style/style.css" />
+    <title>API Frontend</title>
+  </head>
+  <body>
+    <h1>API</h1>
+    <button id="welcomeBtn">Mensagem de boas vindas</button>
+    <div id="welcomeResult"></div>
+
+    <h2>Enviar Nome</h2>
+    <input type="text" id="nameInput" placeholder="Digite seu nome" />
+    <button id="greetBtn">Enviar</button>
+    <div id="greetResult"></div>
+
+    <h2>Deletar Item</h2>
+    <input type="number" id="deleteId" placeholder="ID do Item" />
+    <button id="deleteBtn">Deletar</button>
+    <div id="deleteResult"></div>
+
+    <script>
+      document.getElementById("welcomeBtn").addEventListener("click", () => {
+        fetch("http://localhost:3000/welcome")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("welcomeResult").innerText = data.message;
+          });
+      });
+
+      document.getElementById("greetBtn").addEventListener("click", () => {
+        const name = document.getElementById("nameInput").value;
+        fetch("http://localhost:3000/greet", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("greetResult").innerText = data.message;
+          });
+      });
+
+      document.getElementById("deleteBtn").addEventListener("click", () => {
+        const id = document.getElementById("deleteId").value;
+        fetch(`http://localhost:3000/delete?id=${id}`, {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("deleteResult").innerText = data.message;
+          });
+      });
+    </script>
+  </body>
+</html>
